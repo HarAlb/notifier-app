@@ -1,0 +1,95 @@
+services:
+
+  nginx:
+    image: nginx:alpine
+    container_name: notifier_app_nginx
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - .:/var/www/notifier-app
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "8080:80"
+    networks:
+      - laravel
+    depends_on:
+      - notifier_app
+
+  notifier_app:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    container_name: notifier_app
+    restart: unless-stopped
+    working_dir: /var/www/notifier-app
+    volumes:
+      - ./notifier-app:/var/www/notifier-app
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      notifier_app_rabbitmq:
+        condition: service_healthy
+    networks:
+      - laravel
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-laravel}
+      POSTGRES_USER: ${DB_USERNAME:-laravel}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-secret}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-laravel} -d ${DB_DATABASE:-laravel}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - laravel
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - laravel
+
+  notifier_app_rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: notifier_app_rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - ./docker/rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
+      - ./docker/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+    networks:
+      - laravel
+
+volumes:
+  pgdata:
+  rabbitmq_data:
+
+networks:
+  laravel:
+    driver: bridge

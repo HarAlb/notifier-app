@@ -1,0 +1,140 @@
+{
+  "users": [
+    {
+      "name": "laravel",
+      "password": "secret",
+      "tags": "administrator"
+    }
+  ],
+  "vhosts": [
+    { "name": "/" }
+  ],
+  "exchanges": [
+    {
+      "name": "notifications",
+      "vhost": "/",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "notifications.dlx",
+      "vhost": "/",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "queues": [
+    {
+      "name": "notifications.transactional",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "notifications.dlx",
+        "x-dead-letter-routing-key": "notifications.transactional.dead",
+        "x-message-ttl": 86400000,
+        "x-max-priority": 10
+      }
+    },
+    {
+      "name": "notifications.critical",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "notifications.dlx",
+        "x-dead-letter-routing-key": "notifications.critical.dead",
+        "x-message-ttl": 3600000,
+        "x-max-priority": 10
+      }
+    },
+    {
+      "name": "notifications.marketing",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "notifications.dlx",
+        "x-dead-letter-routing-key": "notifications.marketing.dead",
+        "x-message-ttl": 604800000
+      }
+    },
+    {
+      "name": "notifications.transactional.dead",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "notifications.critical.dead",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "notifications.marketing.dead",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "notifications",
+      "vhost": "/",
+      "destination": "notifications.transactional",
+      "destination_type": "queue",
+      "routing_key": "notifications.transactional",
+      "arguments": {}
+    },
+    {
+      "source": "notifications",
+      "vhost": "/",
+      "destination": "notifications.critical",
+      "destination_type": "queue",
+      "routing_key": "notifications.critical",
+      "arguments": {}
+    },
+    {
+      "source": "notifications",
+      "vhost": "/",
+      "destination": "notifications.marketing",
+      "destination_type": "queue",
+      "routing_key": "notifications.marketing",
+      "arguments": {}
+    },
+    {
+      "source": "notifications.dlx",
+      "vhost": "/",
+      "destination": "notifications.transactional.dead",
+      "destination_type": "queue",
+      "routing_key": "notifications.transactional.dead",
+      "arguments": {}
+    },
+    {
+      "source": "notifications.dlx",
+      "vhost": "/",
+      "destination": "notifications.critical.dead",
+      "destination_type": "queue",
+      "routing_key": "notifications.critical.dead",
+      "arguments": {}
+    },
+    {
+      "source": "notifications.dlx",
+      "vhost": "/",
+      "destination": "notifications.marketing.dead",
+      "destination_type": "queue",
+      "routing_key": "notifications.marketing.dead",
+      "arguments": {}
+    }
+  ]
+}
