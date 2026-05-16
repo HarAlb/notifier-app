@@ -15,17 +15,14 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/notifier-app
 
-COPY ./notifier-app /var/www/notifier-app
-
-RUN composer install --optimize-autoloader --no-interaction
-
-RUN chown -R www-data:www-data /var/www/notifier-app \
-    && chmod -R 755 /var/www/notifier-app/storage \
-    && chmod -R 755 /var/www/notifier-app/bootstrap/cache
+COPY ./docker/php/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 # Supervisor config for queue workers
 COPY ./docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 EXPOSE 9000
+
+ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
