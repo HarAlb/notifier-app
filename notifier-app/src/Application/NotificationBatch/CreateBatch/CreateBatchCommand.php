@@ -14,6 +14,7 @@ final class CreateBatchCommand
         public string $channel,
         public ?string $subject,
         public string $body,
-        public string $priority
+        public string $priority,
+        public array $recipientIds,
     ) {}
 }

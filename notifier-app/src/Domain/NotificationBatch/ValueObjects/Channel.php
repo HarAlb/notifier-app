@@ -13,7 +13,7 @@ final class Channel
     public function __construct(string $value)
     {
         $value = strtolower(trim($value));
-        if (!in_array($value, self::ALLOWED, true)) {
+        if (! in_array($value, self::ALLOWED, true)) {
             throw new \InvalidArgumentException('Channel must be either "email" or "sms"');
         }
         $this->value = $value;

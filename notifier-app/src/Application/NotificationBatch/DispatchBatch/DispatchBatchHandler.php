@@ -4,47 +4,41 @@ declare(strict_types=1);
 
 namespace Src\Application\NotificationBatch\DispatchBatch;
 
-use Illuminate\Support\Facades\Log;
 use Src\Application\NotificationBatch\QueuePublisherInterface;
 use Src\Application\NotificationBatch\SendEmail\SendEmailCommand;
-use Src\Application\Shared\Contracts\TransactionServiceInterface;
 use Src\Domain\NotificationBatch\Entities\NotificationBatch;
+use Src\Domain\NotificationBatch\Entities\NotificationMessage;
 use Src\Domain\NotificationBatch\NotificationBatchRepositoryInterface;
+use Src\Domain\NotificationBatch\NotificationMessageRepositoryInterface;
 use Src\Domain\NotificationBatch\ValueObjects\Priority;
-use Src\Domain\NotificationBatch\ValueObjects\Status;
 
-final class DispatchBatchHandler
+final readonly class DispatchBatchHandler
 {
     public function __construct(
-        private readonly NotificationBatchRepositoryInterface $batchRepository,
-        private readonly QueuePublisherInterface              $publisher,
-        private readonly TransactionServiceInterface          $transaction,
-    )
-    {
-    }
+        private NotificationBatchRepositoryInterface $batchRepository,
+        private NotificationMessageRepositoryInterface $messagesRepository,
+        private QueuePublisherInterface $publisher
+    ) {}
 
     public function handle(DispatchBatchCommand $command): void
     {
-        $notificationBatch = $this->batchRepository->findById($command->batchId);
+        $claimed = $this->batchRepository->claimAsDispatched($command->batchId);
 
-        if (!$notificationBatch || $notificationBatch->getStatus()->equals(Status::pending())) {
+        if (! $claimed) {
             return;
         }
 
-        $this->transaction->run(function () use ($notificationBatch): void {
-            $notificationBatch->markAsDispatched();
-            $this->batchRepository->save($notificationBatch);
-        });
+        $notificationBatch = $this->batchRepository->findById($command->batchId);
 
-        Log::info('WORKED');
-//
-//        $queueName = $this->resolveQueueName($notificationBatch->getPriority());
-//        $priority = $this->resolvePriorityLevel($notificationBatch->getPriority());
-//
-//        // 3. Публикуем каждое сообщение в очередь
-//        foreach ($messages as $message) {
-//            $this->publisher->publish($queueName, $payload, $priority);
-//        }
+        $queueName = $this->resolveQueueName($notificationBatch->getPriority());
+
+        $messages = $this->messagesRepository->findPendingByBatchId($notificationBatch->getId());
+
+        foreach ($messages as $message) {
+            $payload = $this->createPayload($notificationBatch, $message);
+
+            $this->publisher->publish($queueName, $payload);
+        }
     }
 
     private function resolveQueueName(Priority $priority): string
@@ -56,11 +50,10 @@ final class DispatchBatchHandler
         };
     }
 
-    private function createPayload(NotificationBatch $notificationBatch): object
+    private function createPayload(NotificationBatch $notificationBatch, NotificationMessage $message): object
     {
         return match ($notificationBatch->getChannel()->value()) {
-            'email' => new SendEmailCommand($notificationBatch->getId()),
-            'sms'   => new SendSmsCommand($notificationBatch->getId()),
+            'email' => new SendEmailCommand($message->getId())
         };
     }
 }

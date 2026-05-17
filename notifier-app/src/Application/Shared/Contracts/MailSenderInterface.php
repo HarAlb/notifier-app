@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Src\Application\NotificationBatch;
+namespace Src\Application\Shared\Contracts;
 
 interface MailSenderInterface
 {

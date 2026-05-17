@@ -4,63 +4,50 @@ declare(strict_types=1);
 
 namespace Src\Application\NotificationBatch\SendEmail;
 
+use Src\Application\Shared\Contracts\MailSenderInterface;
+use Src\Domain\NotificationBatch\NotificationBatchRepositoryInterface;
+use Src\Domain\NotificationBatch\NotificationMessageRepositoryInterface;
+
 final readonly class SendEmailHandler
 {
     public function __construct(
         private NotificationMessageRepositoryInterface $messageRepository,
-        private MailSenderInterface $mailSender,
-        private TransactionServiceInterface $transaction,
+        private NotificationBatchRepositoryInterface $batchRepository,
+        private MailSenderInterface $mailSender
     ) {}
 
-    public function handle(SendEmailCommand $command, int $attemptNumber = 1): void
+    public function handle(SendEmailCommand $command): void
     {
-        // 1. Атомарный захват сообщения (только если статус pending)
-        $message = $this->messageRepository->findAndLockForProcessing(
-            MessageId::fromString($command->messageId)
-        );
+        $claimed = $this->messageRepository->claimForProcessing($command->messageId);
 
-        if (!$message || !$message->canBeProcessed()) {
-            return; // уже обработано или не найдено
+        if (! $claimed) {
+            return;
         }
 
-        // 2. Меняем статус на processing в той же транзакции
-        $this->transaction->run(function () use ($message) {
-            $message->markAsProcessing();
-            $this->messageRepository->save($message);
-        });
+        $message = $this->messageRepository->findById($command->messageId);
+
+        if ($message->isProcessed()) {
+            return;
+        }
 
         try {
-            // 3. Получаем email пользователя и данные уведомления
-            //    (здесь можно достать batch через репозиторий или предварительно загрузить)
             $batch = $this->batchRepository->findById($message->getBatchId());
-            $userEmail = $this->userRepository->getEmailById($message->getRecipientId());
+            $email = fake()->email();
 
-            // 4. Отправка email через адаптер
             $this->mailSender->send(
-                to: $userEmail,
-                subject: $batch->getSubject() ?? 'Notification',
+                to: $email,
+                subject: $batch->getSubject()->value() ?? 'Notification',
                 body: $batch->getBody()->value()
             );
 
-            // 5. Успех – обновляем статус
-            $this->transaction->run(function () use ($message) {
-                $message->markAsSent();
-                $this->messageRepository->save($message);
-            });
+            $message->markAsSent();
+            $this->messageRepository->save($message);
+
+            $this->batchRepository->tryMarkAsCompleted($batch->getId());
         } catch (\Throwable $e) {
-            // 6. Ошибка – обновляем счётчик попыток
-            $this->transaction->run(function () use ($message, $e) {
-                $message->markAsFailed($e->getMessage());
-                $this->messageRepository->save($message);
-            });
 
-            // 7. Если не превышен лимит – бросаем исключение для ретрая
-            if ($attemptNumber < 5) {
-                throw $e;
-            }
-
-            // 8. Иначе – отправляем в Dead Letter (опционально)
-            $this->deadLetterStore->store($message, $e);
+            $message->markAsFailed($e->getMessage());
+            $this->messageRepository->save($message);
         }
     }
 }

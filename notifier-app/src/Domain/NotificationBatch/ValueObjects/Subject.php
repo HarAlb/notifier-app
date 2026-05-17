@@ -30,6 +30,7 @@ final class Subject
         if ($other === null) {
             return false;
         }
+
         return $this->value === $other->value;
     }
 }
