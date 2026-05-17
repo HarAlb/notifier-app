@@ -6,7 +6,9 @@ namespace Src\Infrastructure\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Src\Domain\NotificationBatch\NotificationBatchRepositoryInterface;
+use Src\Domain\NotificationBatch\NotificationMessageRepositoryInterface;
 use Src\Infrastructure\Persistence\QueryNotificationBatchRepository;
+use Src\Infrastructure\Persistence\QueryNotificationMessageRepository;
 
 final class NotificationBatchProvider extends ServiceProvider
 {
@@ -14,5 +16,6 @@ final class NotificationBatchProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(NotificationBatchRepositoryInterface::class, QueryNotificationBatchRepository::class);
+        $this->app->singleton(NotificationMessageRepositoryInterface::class, QueryNotificationMessageRepository::class);
     }
 }

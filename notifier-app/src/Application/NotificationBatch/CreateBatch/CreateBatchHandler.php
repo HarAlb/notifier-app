@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace Src\Application\NotificationBatch\CreateBatch;
 
+use Illuminate\Database\UniqueConstraintViolationException;
+use Ramsey\Uuid\Uuid;
 use Src\Application\NotificationBatch\AsyncDispatcherInterface;
 use Src\Application\Shared\Contracts\TransactionServiceInterface;
 use Src\Domain\NotificationBatch\Entities\NotificationBatch;
+use Src\Domain\NotificationBatch\Entities\NotificationMessage;
 use Src\Domain\NotificationBatch\NotificationBatchRepositoryInterface;
+use Src\Domain\NotificationBatch\NotificationMessageRepositoryInterface;
 use Src\Domain\NotificationBatch\ValueObjects\Body;
 use Src\Domain\NotificationBatch\ValueObjects\Channel;
 use Src\Domain\NotificationBatch\ValueObjects\IdempotencyKey;
@@ -18,10 +22,10 @@ final readonly class CreateBatchHandler
 {
     public function __construct(
         private NotificationBatchRepositoryInterface $repository,
-        private TransactionServiceInterface          $transactionService,
+        private NotificationMessageRepositoryInterface $messageRepository,
+        private TransactionServiceInterface $transactionService,
         private AsyncDispatcherInterface $asyncDispatcher
-    ) {
-    }
+    ) {}
 
     public function handle(CreateBatchCommand $command): NotificationBatch
     {
@@ -46,13 +50,33 @@ final readonly class CreateBatchHandler
             $subject,
         );
 
+        $messages = [];
+
+        foreach ($command->recipientIds as $recipientId) {
+            $messages[] = NotificationMessage::createForBatch(Uuid::uuid4(), $batch->getId(), $recipientId);
+        }
+
         $this->transactionService->begin();
 
-        $this->repository->save($batch);
+        try {
+            $this->repository->save($batch);
 
-        $this->transactionService->commit();
+            $this->messageRepository->saveMany($messages);
 
-        $this->asyncDispatcher->dispatchBatch($batch->getId());
+            $this->transactionService->commit();
+        } catch (UniqueConstraintViolationException $constraintViolationException) {
+            $batch = $this->repository->findByIdempotencyKey($idempotencyKey);
+            /** @psalm-assert NotificationBatch $batch */
+            \assert($batch !== null);
+
+            return $batch;
+        } catch (\Exception $exception) {
+            $this->transactionService->rollback();
+
+            throw $exception;
+        }
+
+        $this->asyncDispatcher->dispatchBatch($batch->getId(), $batch->getPriority());
 
         return $batch;
     }

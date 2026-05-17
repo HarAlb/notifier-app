@@ -15,15 +15,22 @@ use Src\Domain\NotificationBatch\ValueObjects\Subject;
 final class NotificationBatch
 {
     private UuidInterface $id;
-    private IdempotencyKey $idempotencyKey;
-    private Channel $channel;
-    private ?Subject $subject;
-    private Body $body;
-    private Priority $priority;
-    private Status $status;
-    private \DateTimeImmutable $createdAt;
-    private \DateTimeImmutable $updatedAt;
 
+    private IdempotencyKey $idempotencyKey;
+
+    private Channel $channel;
+
+    private ?Subject $subject;
+
+    private Body $body;
+
+    private Priority $priority;
+
+    private Status $status;
+
+    private \DateTimeImmutable $createdAt;
+
+    private \DateTimeImmutable $updatedAt;
 
     private function __construct(
         UuidInterface $id,
@@ -46,7 +53,6 @@ final class NotificationBatch
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
     }
-
 
     public static function restore(
         UuidInterface $id,
@@ -80,7 +86,7 @@ final class NotificationBatch
         ?Priority $priority = null,
         ?Subject $subject = null,
     ): self {
-        $now = new \DateTimeImmutable();
+        $now = new \DateTimeImmutable;
 
         return new self(
             $id,
@@ -95,10 +101,6 @@ final class NotificationBatch
         );
     }
 
-    /**
-     * @param UuidInterface|null $id
-     * @return NotificationBatch
-     */
     public function setId(?UuidInterface $id): self
     {
         $this->id = $id;
@@ -114,12 +116,10 @@ final class NotificationBatch
     public function setIdempotencyKey(IdempotencyKey $idempotencyKey): NotificationBatch
     {
         $this->idempotencyKey = $idempotencyKey;
+
         return $this;
     }
 
-    /**
-     * @return Status
-     */
     public function getStatus(): Status
     {
         return $this->status;
@@ -129,63 +129,54 @@ final class NotificationBatch
     {
         $newStatus = Status::dispatched();
 
-        if (!$this->status->canTransitionTo($newStatus)) {
+        if (! $this->status->canTransitionTo($newStatus)) {
             throw new \DomainException(
                 sprintf('Cannot transition from %s to %s', $this->status->value(), $newStatus->value())
             );
         }
 
         $this->status = $newStatus;
-        $this->updatedAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable;
     }
 
     public function markAsCompleted(): void
     {
         $newStatus = Status::completed();
 
-        if (!$this->status->canTransitionTo($newStatus)) {
+        if (! $this->status->canTransitionTo($newStatus)) {
             throw new \DomainException(
                 sprintf('Cannot transition from %s to %s', $this->status->value(), $newStatus->value())
             );
         }
 
         $this->status = $newStatus;
-        $this->updatedAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable;
     }
 
     public function markAsFailed(): void
     {
         $newStatus = Status::failed();
 
-        if (!$this->status->canTransitionTo($newStatus)) {
+        if (! $this->status->canTransitionTo($newStatus)) {
             throw new \DomainException(
                 sprintf('Cannot transition from %s to %s', $this->status->value(), $newStatus->value())
             );
         }
 
         $this->status = $newStatus;
-        $this->updatedAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable;
     }
 
-    /**
-     * @return Priority
-     */
     public function getPriority(): Priority
     {
         return $this->priority;
     }
 
-    /**
-     * @return Channel
-     */
     public function getChannel(): Channel
     {
         return $this->channel;
     }
 
-    /**
-     * @return UuidInterface
-     */
     public function getId(): UuidInterface
     {
         return $this->id;

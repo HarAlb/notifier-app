@@ -15,4 +15,8 @@ interface NotificationBatchRepositoryInterface
     public function findById(UuidInterface $id): ?NotificationBatch;
 
     public function findByIdempotencyKey(IdempotencyKey $idempotencyKey): ?NotificationBatch;
+
+    public function claimAsDispatched(UuidInterface $id): bool;
+
+    public function tryMarkAsCompleted(UuidInterface $batchId): bool;
 }

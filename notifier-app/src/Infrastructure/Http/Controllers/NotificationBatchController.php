@@ -10,6 +10,8 @@ use OpenApi\Attributes as OAT;
 use Ramsey\Uuid\Uuid;
 use Src\Application\NotificationBatch\CreateBatch\CreateBatchCommand;
 use Src\Application\NotificationBatch\CreateBatch\CreateBatchHandler;
+use Src\Domain\NotificationBatch\ValueObjects\Priority;
+use Src\Infrastructure\Http\Requests\StoreNotificationBatchRequest;
 
 class NotificationBatchController extends Controller
 {
@@ -34,7 +36,7 @@ class NotificationBatchController extends Controller
             ]
         )
     ]
-    public function store(Request $request, CreateBatchHandler $handler)
+    public function store(StoreNotificationBatchRequest $request, CreateBatchHandler $handler)
     {
         $command = new CreateBatchCommand(
             id: Uuid::uuid4(),
@@ -42,9 +44,10 @@ class NotificationBatchController extends Controller
             channel: $request->input('channel'),
             subject: $request->input('subject'),
             body: $request->input('body'),
-            priority: $request->input('priority', 'marketing')
+            priority: $request->input('priority', Priority::MARKETING->value),
+            recipientIds: $request->input('recipient_ids', [])
         );
 
-        $batch = $handler->handle($command);
+        return response()->json($handler->handle($command), 201);
     }
 }

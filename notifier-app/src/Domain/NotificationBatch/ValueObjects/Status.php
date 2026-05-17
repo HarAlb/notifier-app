@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Src\Domain\NotificationBatch\ValueObjects;
@@ -6,9 +7,13 @@ namespace Src\Domain\NotificationBatch\ValueObjects;
 final class Status
 {
     private const PENDING = 'pending';
+
     private const DISPATCHED = 'dispatched';
+
     private const COMPLETED = 'completed';
+
     private const FAILED = 'failed';
+
     private const ALLOWED = [self::PENDING, self::DISPATCHED, self::COMPLETED, self::FAILED];
 
     private string $value;
@@ -40,9 +45,10 @@ final class Status
 
     public static function fromString(string $value): self
     {
-        if (!in_array($value, self::ALLOWED, true)) {
+        if (! in_array($value, self::ALLOWED, true)) {
             throw new \InvalidArgumentException('Invalid status value');
         }
+
         return new self($value);
     }
 

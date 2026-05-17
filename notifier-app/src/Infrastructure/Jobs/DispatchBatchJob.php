@@ -7,21 +7,20 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\UuidInterface;
 use Src\Application\NotificationBatch\DispatchBatch\DispatchBatchCommand;
 use Src\Application\NotificationBatch\DispatchBatch\DispatchBatchHandler;
 
 class DispatchBatchJob implements ShouldQueue
 {
-    use Dispatchable, Queueable, InteractsWithQueue, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * Create a new job instance.
      */
     public function __construct(private readonly UuidInterface $batchId)
     {
-        Log::info('asdasda');
+        //
     }
 
     /**

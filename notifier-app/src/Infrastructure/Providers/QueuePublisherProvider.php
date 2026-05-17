@@ -10,7 +10,8 @@ use Src\Infrastructure\Messaging\RabbitMqQueuePublisher;
 
 final class QueuePublisherProvider extends AppServiceProvider
 {
-    public function register(): void {
+    public function register(): void
+    {
         $this->app->singleton(QueuePublisherInterface::class, RabbitMqQueuePublisher::class);
     }
 }

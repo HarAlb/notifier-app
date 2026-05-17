@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Src\Infrastructure\Mail;
 
 use Illuminate\Support\Facades\Mail;
-use Src\Application\NotificationBatch\MailSenderInterface;
+use Src\Application\Shared\Contracts\MailSenderInterface;
 
 final class LaravelMailSender implements MailSenderInterface
 {
