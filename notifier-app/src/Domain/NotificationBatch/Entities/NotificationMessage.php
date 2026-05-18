@@ -92,7 +92,6 @@ final class NotificationMessage
         $this->updatedAt = new \DateTimeImmutable;
     }
 
-
     public function markAsProcessing(): void
     {
         if ($this->status !== MessageStatus::PENDING) {

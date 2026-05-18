@@ -38,7 +38,7 @@ class NotificationBatchController extends Controller
                         format: 'uuid'
                     ),
                     example: '019e35c8-dc6e-746e-9a06-d47749b70459'
-                )
+                ),
             ],
             responses: [
                 new OAT\Response(

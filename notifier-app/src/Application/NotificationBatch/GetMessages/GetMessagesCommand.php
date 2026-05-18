@@ -6,8 +6,7 @@ namespace Src\Application\NotificationBatch\GetMessages;
 
 use Ramsey\Uuid\UuidInterface;
 
-final class GetMessagesCommand {
-    public function __construct(public UuidInterface $batchId) {
-
-    }
+final class GetMessagesCommand
+{
+    public function __construct(public UuidInterface $batchId) {}
 }
