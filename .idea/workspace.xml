@@ -5,35 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c5b0f3df-7bf6-4bd2-915c-4b5acb0cf6b6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/notifier-app/.deptrac.cache" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/.deptrac.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/bootstrap/providers.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/bootstrap/providers.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/deptrac.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/deptrac.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/phpunit.xml" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/phpunit.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/src/Application/NotificationBatch/AsyncDispatcherInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Application/NotificationBatch/AsyncDispatcherInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/src/Application/NotificationBatch/CreateBatch/CreateBatchCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Application/NotificationBatch/CreateBatch/CreateBatchCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notifier-app/src/Application/NotificationBatch/CreateBatch/CreateBatchHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Application/NotificationBatch/CreateBatch/CreateBatchHandler.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/src/Application/NotificationBatch/DispatchBatch/DispatchBatchCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Application/NotificationBatch/DispatchBatch/DispatchBatchCommand.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/src/Application/NotificationBatch/DispatchBatch/DispatchBatchHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Application/NotificationBatch/DispatchBatch/DispatchBatchHandler.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/src/Application/NotificationBatch/MailSenderInterface.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/src/Application/NotificationBatch/QueuePublisherInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Application/NotificationBatch/QueuePublisherInterface.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifier-app/src/Application/NotificationBatch/SendEmail/SendEmailCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Application/NotificationBatch/SendEmail/SendEmailCommand.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notifier-app/src/Application/NotificationBatch/SendEmail/SendEmailHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Application/NotificationBatch/SendEmail/SendEmailHandler.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notifier-app/src/Domain/NotificationBatch/Entities/NotificationBatch.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Domain/NotificationBatch/Entities/NotificationBatch.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/src/Domain/NotificationBatch/NotificationBatchRepositoryInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Domain/NotificationBatch/NotificationBatchRepositoryInterface.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifier-app/src/Domain/NotificationBatch/Entities/NotificationMessage.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Domain/NotificationBatch/Entities/NotificationMessage.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notifier-app/src/Domain/NotificationBatch/NotificationMessageRepositoryInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Domain/NotificationBatch/NotificationMessageRepositoryInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/src/Domain/NotificationBatch/ValueObjects/Channel.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Domain/NotificationBatch/ValueObjects/Channel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/src/Domain/NotificationBatch/ValueObjects/Status.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Domain/NotificationBatch/ValueObjects/Status.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/src/Domain/NotificationBatch/ValueObjects/Subject.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Domain/NotificationBatch/ValueObjects/Subject.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Async/LaravelAsyncDispatcher.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Async/LaravelAsyncDispatcher.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Http/Controllers/NotificationBatchController.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Http/Controllers/NotificationBatchController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Jobs/DispatchBatchJob.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Jobs/DispatchBatchJob.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Mail/LaravelMailSender.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Mail/LaravelMailSender.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Messaging/RabbitMqQueuePublisher.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Messaging/RabbitMqQueuePublisher.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Persistence/QueryNotificationBatchRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Persistence/QueryNotificationBatchRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Providers/DispatcherServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Providers/DispatcherServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Providers/NotificationBatchProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Providers/NotificationBatchProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Providers/QueuePublisherProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Providers/QueuePublisherProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/tests/Feature/ExampleTest.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifier-app/tests/Unit/ExampleTest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Jobs/SendEmailJob.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Jobs/SendEmailJob.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Persistence/QueryNotificationMessageRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/notifier-app/src/Infrastructure/Persistence/QueryNotificationMessageRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifier-app/tests/Feature/DispatchBatchTest.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +27,7 @@
     <execution />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="145" />
+    <option name="cachedIndexableFilesCount" value="148" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -224,36 +206,36 @@
       <path value="$PROJECT_DIR$/notifier-app/vendor/php-amqplib/php-amqplib" />
     </include_path>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 0
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="3Dr2wxeXe2MWphtB60n3D2gcC8k" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "notifier__messages",
-    "junie.onboarding.icon.badge.shown": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;notifier__messages&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -269,7 +251,10 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1779026113920</updated>
-      <workItem from="1779026117463" duration="17569000" />
+      <workItem from="1779026117463" duration="19420000" />
+      <workItem from="1779086827304" duration="1394000" />
+      <workItem from="1779095175629" duration="2003000" />
+      <workItem from="1779133674853" duration="914000" />
     </task>
     <servers />
   </component>

@@ -10,5 +10,6 @@ final class SendEmailCommand
 {
     public function __construct(
         public UuidInterface $messageId,
+        public int $tries = 5,
     ) {}
 }

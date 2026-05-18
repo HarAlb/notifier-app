@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Src\Infrastructure\Persistence;
 
 use Illuminate\Support\Facades\DB;
+use Ramsey\Collection\Collection;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Src\Domain\NotificationBatch\Entities\NotificationMessage;
@@ -87,6 +88,28 @@ final class QueryNotificationMessageRepository implements NotificationMessageRep
             ->get();
 
         return $rows->map(fn ($row) => $this->mapToDomain($row))->all();
+    }
+
+    public function findByBatchId(UuidInterface $batchId): array
+    {
+        $rows = DB::table(self::TABLE)
+            ->where('batch_id', $batchId->toString())
+            ->get();
+
+        return $rows->map(fn ($row) => $this->mapToDomain($row))->all();
+    }
+
+    public function markAsRetry(UuidInterface $id, string $error): void
+    {
+        DB::table(self::TABLE)
+            ->where('id', $id)
+            ->where('status', MessageStatus::PROCESSING->value)
+            ->update([
+                'attempts' => DB::raw('attempts + 1'),
+                'status' => MessageStatus::PENDING->value,
+                'last_error' => $error,
+                'updated_at' => now(),
+            ]);
     }
 
     private function mapToDomain(object $row): NotificationMessage

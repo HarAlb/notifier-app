@@ -1,0 +1,292 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Outbox Pattern documentation",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080",
+            "description": "API Server"
+        }
+    ],
+    "paths": {
+        "/v1/notifications": {
+            "post": {
+                "tags": [
+                    "Notification"
+                ],
+                "summary": "Store Notification Batch",
+                "operationId": "storeNotification",
+                "parameters": [
+                    {
+                        "name": "X-Idempotency-Key",
+                        "in": "header",
+                        "description": "Idempotency key",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        },
+                        "example": "019e35c8-dc6e-746e-9a06-d47749b70459"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NotificationBatchStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotificationBatchResponseWrapper"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/notifications/{id}/messages": {
+            "get": {
+                "tags": [
+                    "Notification"
+                ],
+                "summary": "Get details data for message",
+                "operationId": "getMessagesData",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "c78b245f-ff62-4922-a525-1e924f8ce49b"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotificationMessageResponseWrapper"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "NotificationBatchStoreRequest": {
+                "title": "NotificationBatchStoreRequest",
+                "required": [
+                    "channel",
+                    "body",
+                    "recipient_ids"
+                ],
+                "properties": {
+                    "channel": {
+                        "type": "string",
+                        "example": "email",
+                        "enum": [
+                            "email",
+                            "sms",
+                            "push"
+                        ]
+                    },
+                    "subject": {
+                        "type": "string",
+                        "example": "TEST AB",
+                        "nullable": true,
+                        "maxLength": 255
+                    },
+                    "body": {
+                        "type": "string",
+                        "example": "HELLO MESSAGE"
+                    },
+                    "priority": {
+                        "type": "string",
+                        "nullable": true,
+                        "enum": [
+                            "transactional",
+                            "critical",
+                            "marketing"
+                        ]
+                    },
+                    "recipient_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "example": [
+                            1,
+                            2,
+                            3
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "ValidationErrorResponse": {
+                "title": "ValidationErrorResponse",
+                "description": "Validation error response",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "The channel field is required."
+                    },
+                    "errors": {
+                        "type": "object",
+                        "example": {
+                            "channel": [
+                                "The channel field is required."
+                            ]
+                        },
+                        "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "NotificationBatchResponse": {
+                "title": "NotificationBatchResponse",
+                "description": "Notification batch response",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "313741c7-8dc9-42c9-99b5-d6fa4bf35d92"
+                    },
+                    "idempotency_key": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "019e35c8-dc6e-746e-9a06-d47749b70459"
+                    },
+                    "channel": {
+                        "type": "string",
+                        "example": "email"
+                    },
+                    "subject": {
+                        "type": "string",
+                        "example": "Subject if email",
+                        "nullable": true
+                    },
+                    "body": {
+                        "type": "string",
+                        "example": "Body"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "pending"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2026-05-18 19:21:54"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2026-05-18 19:21:54"
+                    },
+                    "messages_count": {
+                        "type": "integer",
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "NotificationMessageResponse": {
+                "title": "NotificationMessageResponse",
+                "description": "Notification message resource",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "313741c7-8dc9-42c9-99b5-d6fa4bf35d92"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "pending"
+                    },
+                    "attempts": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "last_error": {
+                        "type": "string",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2026-05-18 19:21:54"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2026-05-18 19:21:54"
+                    }
+                },
+                "type": "object"
+            },
+            "NotificationBatchResponseWrapper": {
+                "title": "Notification Batch Response Wrapper",
+                "properties": {
+                    "data": {
+                        "$ref": "#/components/schemas/NotificationBatchResponse"
+                    }
+                },
+                "type": "object"
+            },
+            "NotificationMessageResponseWrapper": {
+                "title": "Notification Message Response Wrapper",
+                "properties": {
+                    "data": {
+                        "title": "Data",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/NotificationMessageResponse"
+                        }
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Notification",
+            "description": "Notification"
+        }
+    ]
+}

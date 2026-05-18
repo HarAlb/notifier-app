@@ -6,7 +6,6 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Src\Domain\NotificationBatch\ValueObjects\Priority;
-use Src\Domain\NotificationBatch\ValueObjects\Status;
 
 class StoreNotificationBatchRequest extends FormRequest
 {
