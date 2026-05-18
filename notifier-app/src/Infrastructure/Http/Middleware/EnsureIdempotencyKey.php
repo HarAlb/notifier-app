@@ -5,7 +5,6 @@ namespace Src\Infrastructure\Http\Middleware;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureIdempotencyKey
@@ -19,23 +18,12 @@ class EnsureIdempotencyKey
     {
         $key = $request->header('X-Idempotency-Key');
 
-        if (!$key) {
+        if (! $key) {
             return new JsonResponse([
                 'message' => 'X-Idempotency-Key header is required.',
                 'errors' => [
                     'X-Idempotency-Key' => [
                         'The X-Idempotency-Key header is required.',
-                    ],
-                ],
-            ], 422);
-        }
-
-        if (!is_string($key) || !str($key)->isUuid()) {
-            return new JsonResponse([
-                'message' => 'X-Idempotency-Key must be valid UUID.',
-                'errors' => [
-                    'X-Idempotency-Key' => [
-                        'The X-Idempotency-Key header must be a valid UUID.',
                     ],
                 ],
             ], 422);

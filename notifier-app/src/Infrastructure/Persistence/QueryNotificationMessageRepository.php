@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Src\Infrastructure\Persistence;
 
 use Illuminate\Support\Facades\DB;
-use Ramsey\Collection\Collection;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Src\Domain\NotificationBatch\Entities\NotificationMessage;

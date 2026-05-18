@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace App\Virtual\Responses;
+
 use OpenApi\Attributes as OAT;
 
 #[OAT\Schema(
@@ -48,7 +49,6 @@ final class NotificationBatchResponse
         example: 'Body'
     )]
     public string $body;
-
 
     #[OAT\Property(
         property: 'status',

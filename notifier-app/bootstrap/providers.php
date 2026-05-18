@@ -1,12 +1,17 @@
 <?php
 
 use App\Providers\AppServiceProvider;
+use Src\Infrastructure\Providers\DispatcherServiceProvider;
+use Src\Infrastructure\Providers\MailSenderProvider;
+use Src\Infrastructure\Providers\NotificationBatchProvider;
+use Src\Infrastructure\Providers\QueuePublisherProvider;
+use Src\Infrastructure\Providers\TransactionServiceProvider;
 
 return [
     AppServiceProvider::class,
-    \Src\Infrastructure\Providers\NotificationBatchProvider::class,
-    \Src\Infrastructure\Providers\TransactionServiceProvider::class,
-    \Src\Infrastructure\Providers\DispatcherServiceProvider::class,
-    \Src\Infrastructure\Providers\QueuePublisherProvider::class,
-    \Src\Infrastructure\Providers\MailSenderProvider::class,
+    NotificationBatchProvider::class,
+    TransactionServiceProvider::class,
+    DispatcherServiceProvider::class,
+    QueuePublisherProvider::class,
+    MailSenderProvider::class,
 ];
