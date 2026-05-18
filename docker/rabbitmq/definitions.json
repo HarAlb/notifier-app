@@ -6,6 +6,15 @@
       "tags": "administrator"
     }
   ],
+  "permissions": [
+    {
+      "user": "laravel",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
   "vhosts": [
     { "name": "/" }
   ],

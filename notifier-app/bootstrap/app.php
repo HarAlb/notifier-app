@@ -7,12 +7,21 @@ use Illuminate\Foundation\Configuration\Middleware;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
+        api: __DIR__ . '/../routes/api.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
+        apiPrefix: 'v1'
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'idempotency' => \Src\Infrastructure\Http\Middleware\EnsureIdempotencyKey::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (DomainException $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'errors' => null,
+            ], \Symfony\Component\HttpFoundation\Response::HTTP_CONFLICT);
+        });
     })->create();

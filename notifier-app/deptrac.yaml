@@ -1,0 +1,35 @@
+deptrac:
+  paths:
+    - ./src
+  exclude_files:
+    - '#.*test.*#'
+  layers:
+    - name: Domain
+      collectors:
+        - type: directory
+          value: src/Domain
+
+    - name: Application
+      collectors:
+        - type: directory
+          value: src/Application
+
+    - name: Infrastructure
+      collectors:
+        - type: directory
+          value: src/Infrastructure
+    - name: Framework
+      collectors:
+        - type: class
+          value: Illuminate\Support\ServiceProvider
+        - type: class
+          value: Illuminate\Contracts\*
+          regex: true
+  ruleset:
+    Domain: []
+    Application:
+      - Domain
+    Infrastructure:
+      - Application
+      - Domain
+      - Framework
