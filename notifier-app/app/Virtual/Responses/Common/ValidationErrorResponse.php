@@ -24,8 +24,8 @@ final class ValidationErrorResponse
         type: 'object',
         example: [
             'channel' => [
-                'The channel field is required.'
-            ]
+                'The channel field is required.',
+            ],
         ],
         additionalProperties: new OAT\AdditionalProperties(
             type: 'array',

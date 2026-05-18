@@ -36,7 +36,7 @@ final readonly class SendEmailHandler
 
             $this->mailSender->send(
                 to: $email,
-                subject: $batch->getSubject()->value() ?? 'Notification',
+                subject: $batch->getSubject()->value(),
                 body: $batch->getBody()->value()
             );
 

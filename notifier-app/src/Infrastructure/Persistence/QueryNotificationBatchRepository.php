@@ -81,18 +81,18 @@ class QueryNotificationBatchRepository implements NotificationBatchRepositoryInt
     public function tryMarkAsCompleted(UuidInterface $batchId): bool
     {
         return DB::table('notification_batches as b')
-                ->where('b.id', $batchId->toString())
-                ->where('b.status', '!=', Status::completed()->value())
-                ->whereNotExists(function ($query) {
-                    $query->select(DB::raw(1))
-                        ->from('notification_messages as m')
-                        ->whereColumn('m.batch_id', 'b.id')
-                        ->where('m.status', '!=', MessageStatus::SENT->value);
-                })
-                ->update([
-                    'b.status' => Status::completed()->value(),
-                    'b.updated_at' => now(),
-                ]) === 1;
+            ->where('b.id', $batchId->toString())
+            ->where('b.status', '!=', Status::completed()->value())
+            ->whereNotExists(function ($query) {
+                $query->select(DB::raw(1))
+                    ->from('notification_messages as m')
+                    ->whereColumn('m.batch_id', 'b.id')
+                    ->where('m.status', '!=', MessageStatus::SENT->value);
+            })
+            ->update([
+                'b.status' => Status::completed()->value(),
+                'b.updated_at' => now(),
+            ]) === 1;
     }
 
     private function mapToDomain(object $row): NotificationBatch

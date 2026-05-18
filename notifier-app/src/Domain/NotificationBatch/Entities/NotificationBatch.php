@@ -214,9 +214,6 @@ final class NotificationBatch
         return $this;
     }
 
-    /**
-     * @return Collection
-     */
     public function getMessages(): Collection
     {
         return $this->messages;

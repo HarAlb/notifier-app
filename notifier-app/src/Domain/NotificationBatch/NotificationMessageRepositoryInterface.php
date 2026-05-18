@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Src\Domain\NotificationBatch;
 
-use Ramsey\Collection\Collection;
 use Ramsey\Uuid\UuidInterface;
 use Src\Domain\NotificationBatch\Entities\NotificationMessage;
 

@@ -25,7 +25,7 @@ class NotificationMessageController extends Controller
                     response: 200,
                     description: 'OK',
                     content: new OAT\JsonContent(ref: '#/components/schemas/NotificationMessageResponseWrapper')
-                )
+                ),
             ]
         ),
         OAT\Parameter(

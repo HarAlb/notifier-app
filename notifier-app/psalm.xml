@@ -22,9 +22,9 @@
     </plugins>
 
     <issueHandlers>
-        <ClassMustBeFinal errorLevel="info"/>
+        <ClassMustBeFinal errorLevel="suppress"/>
         <ImplicitToStringCast errorLevel="info"/>
-        <MissingClosureReturnType errorLevel="info"/>
+        <MissingClosureReturnType errorLevel="error"/>
         <MissingOverrideAttribute errorLevel="info"/>
         <RedundantCast errorLevel="info"/>
         <RedundantCondition errorLevel="info"/>
