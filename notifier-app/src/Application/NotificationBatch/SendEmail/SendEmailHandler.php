@@ -45,9 +45,22 @@ final readonly class SendEmailHandler
 
             $this->batchRepository->tryMarkAsCompleted($batch->getId());
         } catch (\Throwable $e) {
+            if ($message->getAttempts() + 1 >= $command->tries) {
+                $message->markAsFailed(
+                    $e->getMessage()
+                );
 
-            $message->markAsFailed($e->getMessage());
-            $this->messageRepository->save($message);
+                $this->messageRepository->save($message);
+
+                return;
+            }
+
+            $this->messageRepository->markAsRetry(
+                $message->getId(),
+                $e->getMessage()
+            );
+
+            throw $e;
         }
     }
 }

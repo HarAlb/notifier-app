@@ -53,7 +53,10 @@ final readonly class CreateBatchHandler
         $messages = [];
 
         foreach ($command->recipientIds as $recipientId) {
-            $messages[] = NotificationMessage::createForBatch(Uuid::uuid4(), $batch->getId(), $recipientId);
+            $message = NotificationMessage::createForBatch(Uuid::uuid4(), $batch->getId(), $recipientId);
+            $messages[] = $message;
+
+            $batch->addMessage($message);
         }
 
         $this->transactionService->begin();
@@ -65,9 +68,18 @@ final readonly class CreateBatchHandler
 
             $this->transactionService->commit();
         } catch (UniqueConstraintViolationException $constraintViolationException) {
+
+            $this->transactionService->rollback();
+
             $batch = $this->repository->findByIdempotencyKey($idempotencyKey);
             /** @psalm-assert NotificationBatch $batch */
             \assert($batch !== null);
+
+            $messages = $this->messageRepository->findPendingByBatchId($batch->getId());
+
+            foreach ($messages as $message) {
+                $batch->addMessage($message);
+            }
 
             return $batch;
         } catch (\Exception $exception) {

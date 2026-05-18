@@ -86,6 +86,13 @@ final class NotificationMessage
         );
     }
 
+    public function markAsPending(): void
+    {
+        $this->status = MessageStatus::PENDING;
+        $this->updatedAt = new \DateTimeImmutable;
+    }
+
+
     public function markAsProcessing(): void
     {
         if ($this->status !== MessageStatus::PENDING) {
@@ -123,7 +130,6 @@ final class NotificationMessage
         $this->attempts++;
         $this->lastError = $error;
         $this->updatedAt = new \DateTimeImmutable;
-        // статус при этом остаётся processing или pending – решает бизнес-логика
     }
 
     // Getters

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Src\Domain\NotificationBatch\Entities;
 
+use Ramsey\Collection\Collection;
 use Ramsey\Uuid\UuidInterface;
 use Src\Domain\NotificationBatch\ValueObjects\Body;
 use Src\Domain\NotificationBatch\ValueObjects\Channel;
@@ -32,6 +33,8 @@ final class NotificationBatch
 
     private \DateTimeImmutable $updatedAt;
 
+    private Collection $messages;
+
     private function __construct(
         UuidInterface $id,
         IdempotencyKey $idempotencyKey,
@@ -52,6 +55,8 @@ final class NotificationBatch
         $this->status = $status;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
+
+        $this->messages = new Collection(NotificationMessage::class);
     }
 
     public static function restore(
@@ -200,5 +205,20 @@ final class NotificationBatch
     public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    public function addMessage(NotificationMessage $message): self
+    {
+        $this->messages->add($message);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
     }
 }

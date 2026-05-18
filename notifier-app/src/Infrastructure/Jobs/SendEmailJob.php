@@ -18,10 +18,9 @@ final class SendEmailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    // Настройки ретраев (можно через config)
     public int $tries = 5;
 
-    public array $backoff = [5, 15, 60, 300]; // экспоненциальная задержка
+    public array $backoff = [5, 15, 60, 300];
 
     public function __construct(
         private UuidInterface $messageId
@@ -29,8 +28,7 @@ final class SendEmailJob implements ShouldQueue
 
     public function handle(SendEmailHandler $handler): void
     {
-        $command = new SendEmailCommand($this->messageId);
-        Log::info('Hanle Send Email');
+        $command = new SendEmailCommand($this->messageId, $this->tries);
         $handler->handle($command);
     }
 }
