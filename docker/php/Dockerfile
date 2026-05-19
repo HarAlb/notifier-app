@@ -14,15 +14,15 @@ RUN pecl install amqp && docker-php-ext-enable amqp
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-RUN composer install --no-interaction --no-dev --optimize-autoloader
-
-WORKDIR /var/www/notifier-app
-
 COPY ./docker/php/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Supervisor config for queue workers
 COPY ./docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+WORKDIR /var/www/notifier-app
+
+COPY ./notifier-app /var/www/notifier-app
 
 EXPOSE 9000
 

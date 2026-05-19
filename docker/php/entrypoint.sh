@@ -7,6 +7,12 @@ done
 
 sleep 5
 
+if [ ! -d "/var/www/notifier-app/vendor" ]; then
+  echo "Vendor not found. Running composer install..."
+  cd /var/www/notifier-app
+  composer install --no-interaction --optimize-autoloader --no-dev
+fi
+
 chown -R www-data:www-data /var/www/notifier-app/storage
 chown -R www-data:www-data /var/www/notifier-app/bootstrap/cache
 
