@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Src\Domain\NotificationBatch\Entities;
 
+use Ramsey\Collection\Collection;
 use Ramsey\Uuid\UuidInterface;
 use Src\Domain\NotificationBatch\ValueObjects\MessageStatus;
 
@@ -25,6 +26,8 @@ final class NotificationMessage
 
     private \DateTimeImmutable $updatedAt;
 
+    private Collection $statusHistory;
+
     private function __construct(
         UuidInterface $id,
         UuidInterface $batchId,
@@ -43,6 +46,8 @@ final class NotificationMessage
         $this->lastError = $lastError;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
+
+        $this->statusHistory = new Collection(NotificationMessageStatusHistory::class);
     }
 
     public static function createForBatch(
@@ -178,5 +183,19 @@ final class NotificationMessage
     public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getStatusHistory(): Collection
+    {
+        return $this->statusHistory;
+    }
+
+    public function addToHistory(NotificationMessageStatusHistory $messageStatusHistory): self
+    {
+        $this->statusHistory->add($messageStatusHistory);
+        return $this;
     }
 }

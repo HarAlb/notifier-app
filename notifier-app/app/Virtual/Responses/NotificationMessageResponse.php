@@ -57,4 +57,13 @@ final class NotificationMessageResponse
         example: '2026-05-18 19:21:54'
     )]
     public string $updated_at;
+
+
+    #[
+        OAT\Property(
+            title: 'History',
+            items: new OAT\Items(ref: '#/components/schemas/NotificationMessageHistoryResponse')
+        )
+    ]
+    public array $history;
 }
