@@ -27,6 +27,7 @@ final class NotificationMessageResource extends JsonResource
             'last_error' => $notificationMessage->getLastError(),
             'created_at' => $notificationMessage->getCreatedAt()->format('Y-m-d H:i:s'),
             'updated_at' => $notificationMessage->getUpdatedAt()->format('Y-m-d H:i:s'),
+            'history' => NotificationMessageStatusHistoryResource::collection($notificationMessage->getStatusHistory()->toArray()),
         ];
     }
 }

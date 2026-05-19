@@ -224,6 +224,30 @@
                 },
                 "type": "object"
             },
+            "NotificationMessageHistoryResponse": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "cdb9e499-94bf-44ff-889c-9aec4c0bc8ff"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "processing"
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2026-05-19 09:56:15"
+                    }
+                },
+                "type": "object"
+            },
             "NotificationMessageResponse": {
                 "title": "NotificationMessageResponse",
                 "description": "Notification message resource",
@@ -255,6 +279,13 @@
                         "type": "string",
                         "format": "date-time",
                         "example": "2026-05-18 19:21:54"
+                    },
+                    "history": {
+                        "title": "History",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/NotificationMessageHistoryResponse"
+                        }
                     }
                 },
                 "type": "object"
